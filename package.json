@@ -1,6 +1,6 @@
 {
   "name": "@sfdxclient/common",
-  "version": "1.0.1",
+  "version": "1.0.6",
   "description": "SFDX Client for node-js",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
   ],
   "author": "Prass, Max J.",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "crypto": "^1.0.1",
     "crypto-js": "^4.0.0"
   }

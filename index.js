@@ -1,20 +1,8 @@
 function sfdxcli () {
-    this.getAuthJwtGrantBySfdx = getAuthJwtGrantBySfdx
     this.generateAccessToken = generateAccessToken
 }
 
-function getAuthJwtGrantBySfdx (username) {
-
-    cy.exec(`sfdx force:org:display -u ${ username } --json`)
-    .then((response) => {
-
-        var data = response.stdout
-        data = data.replace(/..[0-9]+m/g, '')
-        return JSON.parse(data).result
-    })
-}
-
-function generateAccessToken(client_id, url_auth, username, private_key, timeout_s) {
+function generateAccessToken(client_id, url_auth, username, private_key, timeout_s, callback) {
     
     var CryptoJS = require('crypto-js')
     var Crypto = require('crypto')
@@ -23,7 +11,7 @@ function generateAccessToken(client_id, url_auth, username, private_key, timeout
         'alg': 'RS256'
     };
 
-    var timeoutTimestamp = Math.floor(Date.now() / 1000) + timeout_s // expiry time is 'timeout_s' seconds from time of creation
+    var timeoutTimestamp = Math.floor(Date.now() / 1000) + timeout_s
 
     var data = {
         "iss": client_id,
@@ -39,7 +27,6 @@ function generateAccessToken(client_id, url_auth, username, private_key, timeout
         return cleanedEncode
     }
     function base64url(source) {
-        // Encode in classical base64
         encodedSource = CryptoJS.enc.Base64.stringify(source)
         encodeCleanded = cleanEncodeBase64(encodedSource)
         return encodeCleanded
@@ -56,14 +43,16 @@ function generateAccessToken(client_id, url_auth, username, private_key, timeout
     // build token
     var token = `${encodedHeader}.${encodedData}`
 
-    // sign token
+    // token + privateKey (RSA+SHA256)
     var signerObject = Crypto.createSign("RSA-SHA256")
     signerObject.update(token)
     var signature = signerObject.sign({key: private_key, padding: Crypto.constants.RSA_PKCS1_PADDING}, "base64")
     signature = cleanEncodeBase64(signature)
 
+    // assertion
     var assertion = `${token}.${signature}`
-    return assertion
+    
+    callback(assertion)
 
 }
 
