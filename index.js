@@ -1,25 +1,70 @@
+var CryptoJS = require('crypto-js')
+var Crypto = require('crypto')
 
 function sfdxcli () {
-    this.auth = auth;
+    this.getAuthJwtGrantBySfdx = getAuthJwtGrantBySfdx
+    this.generateAccessToken = generateAccessToken
 }
 
-function auth (username) {
+function getAuthJwtGrantBySfdx (username) {
 
     cy.exec(`sfdx force:org:display -u ${ username } --json`)
     .then((response) => {
 
-        var data = response.stdout;
-        data = data.replace(/..[0-9]+m/g, '');
-
-        let result = JSON.parse(data).result;
-        let sessionId = result.accessToken;
-        let instanceUrl = result.instanceUrl;
-
-        cy.request(`${instanceUrl}/secur/frontdoor.jsp?sid=${sessionId}`)
-        .then(() => {
-            debugger
-            cy.visit(`${instanceUrl}/lightning`)
-        })
+        var data = response.stdout
+        data = data.replace(/..[0-9]+m/g, '')
+        return JSON.parse(data).result
     })
 }
+
+function generateAccessToken(client_id, url_auth, username, private_key, timeout_s) {
+
+    var header = {
+        'alg': 'RS256'
+    };
+
+    var timeoutTimestamp = Math.floor(Date.now() / 1000) + timeout_s // expiry time is 'timeout_s' seconds from time of creation
+
+    var data = {
+        "iss": client_id,
+        "prn": username,
+        "aud": url_auth,
+        'exp': timeoutTimestamp + 180
+    }
+
+    function cleanEncodeBase64(data) {
+        cleanedEncode = data.replace(/=+$/, '')
+        cleanedEncode = cleanedEncode.replace(/\+/g, '-')
+        cleanedEncode = cleanedEncode.replace(/\//g, '_')
+        return cleanedEncode
+    }
+    function base64url(source) {
+        // Encode in classical base64
+        encodedSource = CryptoJS.enc.Base64.stringify(source)
+        encodeCleanded = cleanEncodeBase64(encodedSource)
+        return encodeCleanded
+    }
+
+    // encode header
+    var stringifiedHeader = CryptoJS.enc.Utf8.parse(JSON.stringify(header))
+    var encodedHeader = base64url(stringifiedHeader)
+
+    // encode data
+    var stringifiedData = CryptoJS.enc.Utf8.parse(JSON.stringify(data))
+    var encodedData = base64url(stringifiedData)
+
+    // build token
+    var token = `${encodedHeader}.${encodedData}`
+
+    // sign token
+    var signerObject = Crypto.createSign("RSA-SHA256")
+    signerObject.update(token)
+    var signature = signerObject.sign({key: private_key, padding: Crypto.constants.RSA_PKCS1_PADDING}, "base64")
+    signature = cleanEncodeBase64(signature)
+
+    var assertion = `${token}.${signature}`
+    return assertion
+
+}
+
 module.exports = sfdxcli
