@@ -1,6 +1,3 @@
-var CryptoJS = require('crypto-js')
-var Crypto = require('crypto')
-
 function sfdxcli () {
     this.getAuthJwtGrantBySfdx = getAuthJwtGrantBySfdx
     this.generateAccessToken = generateAccessToken
@@ -18,6 +15,9 @@ function getAuthJwtGrantBySfdx (username) {
 }
 
 function generateAccessToken(client_id, url_auth, username, private_key, timeout_s) {
+    
+    var CryptoJS = require('crypto-js')
+    var Crypto = require('crypto')
 
     var header = {
         'alg': 'RS256'
