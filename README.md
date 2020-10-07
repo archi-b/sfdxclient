@@ -2,7 +2,7 @@
 
 ### 1. Install lib in your code
 ```bash
-npm install @sfdxclient/common
+npm install @sfdxclient/common crypto-js crypto
 ```
 
 ### 2. How use this lib
