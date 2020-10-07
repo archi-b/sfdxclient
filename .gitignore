@@ -49,6 +49,7 @@ typings/
 
 # Optional npm cache directory
 .npm
+package-lock.json
 
 # Optional eslint cache
 .eslintcache
@@ -102,3 +103,10 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Google compile
+# https://closure-compiler.appspot.com/home
+compile/*
+.git-private/*
+.git-public/*
+launch.json
