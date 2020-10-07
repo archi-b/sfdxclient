@@ -1,0 +1,33 @@
+{
+  "name": "@sfdxclient/oauth2",
+  "version": "0.0.6",
+  "description": "SFDX Client for node-js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compile": "npx google-closure-compiler --js=index.js --js_output_file=compile/index.js"
+  },
+  "keywords": [
+    "salesforce",
+    "oauth2",
+    "authentication"
+  ],
+  "author": "Prass, Max J.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/archi-b/sfdxclient-public/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/archi-b/sfdxclient-public.git"
+  },
+  "homepage": "https://github.com/archi-b/sfdxclient-public",
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.0.0"
+  },
+  "devDependencies": {
+    "google-closure-compiler": "^20200927.0.0",
+    "npx": "^10.2.2"
+  }
+}
