@@ -21,7 +21,7 @@ let privateKey = '-----BEGIN RSA PRIVATE KEY-----\n' +
     '---------YOUR-PRIVATE-KEY-HERE----------\n' + 
     '-----END RSA PRIVATE KEY-----'
     
-sfdx.generateAccessToken(clientId, urlAuth, username, privateKey, timeout_s, (response) => {
+sfdx.OAuth2Assertion(clientId, urlAuth, username, privateKey, timeout_s, (response) => {
     console.log(`assertion: ${response}`)
 
     /// --- WRITE YOUR REQUEST HTTP POST HERE --- ///

@@ -1,8 +1,8 @@
 function sfdxcli () {
-    this.generateAccessToken = generateAccessToken
+    this.OAuth2Assertion = OAuth2Assertion
 }
 
-function generateAccessToken(client_id, url_auth, username, private_key, timeout_s, callback) {
+function OAuth2Assertion(client_id, url_auth, username, private_key, timeout_s, callback) {
     
     var CryptoJS = require('crypto-js')
     var Crypto = require('crypto')
