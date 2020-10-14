@@ -1,6 +1,6 @@
 {
   "name": "@sfdxclient/oauth2",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "description": "SFDX Client for node-js",
   "main": "index.js",
   "scripts": {
