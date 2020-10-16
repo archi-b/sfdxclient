@@ -1,16 +1,14 @@
-# sfdxclient
+# @sfdxclient/oauth2
 
 ### 1. Install lib in your code
 ```bash
-npm install @sfdxclient/common crypto-js crypto
+npm install @sfdxclient/oauth2 crypto-js crypto
 ```
 
 ### 2. How use this lib
 
 ```javascript
-import sfdxclient from '@sfdxclient/common'
-const path = require('path')
-const sfdx = new sfdxclient
+var sfdx = require('@sfdxclient/oauth2')
 
 // private
 let clientId = "YOUR-CONSUMER-KEY"
